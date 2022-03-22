@@ -7,7 +7,7 @@
 
 ## Introduction
 
-A new version of craigpaul/moneris-api and all credit goes to Craig Paul. 
+A new version of craigpaul/moneris-api and all credit goes to Craig Paul.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ PHP 7.3 and later
 To get started, install the package via the Composer package manager:
 
 ```php
-composer require craigpaul/moneris-api
+composer require thetestcoder/moneris-api
 ```
 
 ## Instantiation
