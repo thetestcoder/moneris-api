@@ -1,6 +1,6 @@
 {
-    "name": "craigpaul/moneris-api",
-    "description": "An easier way to consume the (truly awful) Moneris eSELECTplus API.",
+    "name": "thetestcoder/moneris-api",
+    "description": "Upgrade version of craigpaul/moneris-api. An easier way to consume the (truly awful) Moneris eSELECTplus API.",
     "keywords": [
         "moneris",
         "eselectplus",
@@ -11,6 +11,10 @@
         {
             "name": "Craig Paul",
             "email": "craig@townfolio.co"
+        },
+        {
+            "name": "The Test coder",
+            "email": "thetestcoder@gmail.com"
         }
     ],
     "require": {

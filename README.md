@@ -4,10 +4,14 @@
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 [![Total Downloads][ico-downloads]][link-downloads]
- 
+
+## Introduction
+
+A new version of craigpaul/moneris-api and all credit goes to Craig Paul. 
+
 ## Requirements
 
-PHP 5.6 and later
+PHP 7.3 and later
 
 ## Composer
 
@@ -63,7 +67,8 @@ $gateway = Moneris::create($id, $token, $params);
 
 ## Transactions
 
-To make a purchase, preauth a card, void a transaction, etc. is very straightforward once you have your Gateway instantiated ([see above](#instantiation)).
+To make a purchase, preauth a card, void a transaction, etc. is very straightforward once you have your Gateway
+instantiated ([see above](#instantiation)).
 
 ### Purchase
 
@@ -157,9 +162,11 @@ $response = $gateway->verify($params);
 
 ### CVD and AVS
 
-To take advantage of the Card Verification Digits and/or Address Verification Service provided by Moneris, you need to tell Moneris that upon instantiation ([as shown above](#instantiation)).
+To take advantage of the Card Verification Digits and/or Address Verification Service provided by Moneris, you need to
+tell Moneris that upon instantiation ([as shown above](#instantiation)).
 
-When making a CVD secured purchase, pre-authorization or card verification, you need to pass the following parameter to the Gateway method you are utilizing.
+When making a CVD secured purchase, pre-authorization or card verification, you need to pass the following parameter to
+the Gateway method you are utilizing.
 
 ```php
 $params = [
@@ -174,7 +181,8 @@ $params = [
 $response = $gateway->verify($params); // could be purchase, preauth, etc.
 ```
 
-When making an AVS secured purchase, pre-authorization or card verification, you need to pass the following parameters to the Gateway method you are utilizing.
+When making an AVS secured purchase, pre-authorization or card verification, you need to pass the following parameters
+to the Gateway method you are utilizing.
 
 ```php
 $params = [
@@ -193,7 +201,9 @@ $response = $gateway->verify($params); // could be purchase, preauth, etc.
 
 > Note: When making an AVS or CVD secured transaction, even if AVS or CVD fails, you will still have to void the transaction (DAMN MONERIS!). There are two easy ways around this.
 
-Verify the card first. Using this method, there is one additional caveat (let me repeat it again...DAMN MONERIS!). Your verification transaction and purchase transaction must have different `order_id` parameters. One such solution could be to prepend an specific prefix to the front of verification order ids.
+Verify the card first. Using this method, there is one additional caveat (let me repeat it again...DAMN MONERIS!). Your
+verification transaction and purchase transaction must have different `order_id` parameters. One such solution could be
+to prepend an specific prefix to the front of verification order ids.
 
 ```php
 $response = $gateway->verify($params);
@@ -226,7 +236,7 @@ if ($response->successful && ($response->failedAvs || $response->failedCvd)) {
 
 ### Credential On File
 
-The credential on file is part of the new Visa requirements to pass the CVD/CVV2 data for transactions. 
+The credential on file is part of the new Visa requirements to pass the CVD/CVV2 data for transactions.
 
 ```php
 $params = [
@@ -243,7 +253,8 @@ $response = $vault->purchase($params); // could be purchase, preauth, etc.
 
 ## Vault
 
-The Moneris Vault allows you create and maintain credit card profiles on the Moneris servers instead of your own. To access the Vault, you will need to have your instantiated Gateway ([see above](#instantiation)).
+The Moneris Vault allows you create and maintain credit card profiles on the Moneris servers instead of your own. To
+access the Vault, you will need to have your instantiated Gateway ([see above](#instantiation)).
 
 ```php
 $vault = $gateway->cards();
@@ -251,7 +262,7 @@ $vault = $gateway->cards();
 
 ### Add a Card
 
-> **Note:** The expiry passed into the credit card is in the format of YYMM as that is how Moneris accepts it. 
+> **Note:** The expiry passed into the credit card is in the format of YYMM as that is how Moneris accepts it.
 
 ```php
 use CraigPaul\Moneris\CreditCard;
@@ -265,7 +276,9 @@ $response = $vault->add($card);
 
 ### Update a Card
 
-In order to maintain your credit card profiles, Moneris will send back a unique key for the profile that will allow you to keep track in your own database. You can retrieve the key once you have received your Receipt ([see more below](#responses-and-receipts))
+In order to maintain your credit card profiles, Moneris will send back a unique key for the profile that will allow you
+to keep track in your own database. You can retrieve the key once you have received your
+Receipt ([see more below](#responses-and-receipts))
 
 ```php
 $card = CreditCard::create('4242424242424242', '2012');
@@ -291,7 +304,8 @@ $response = $vault->delete($key);
 
 ### Attaching a Customer
 
-In order to sync your customer information with the credit cards stored in the Vault, we can attach a basic `Customer` object to the `CreditCard`.
+In order to sync your customer information with the credit cards stored in the Vault, we can attach a basic `Customer`
+object to the `CreditCard`.
 
 #### Add a Card
 
@@ -384,7 +398,8 @@ $response = $vault->expiring();
 
 ### Transactions
 
-Credit cards stored in the Moneris Vault have a slightly different flow for purchasing and pre-authorization. Any of the other transactions work exactly the same as shown above. 
+Credit cards stored in the Moneris Vault have a slightly different flow for purchasing and pre-authorization. Any of the
+other transactions work exactly the same as shown above.
 
 #### Vault Purchase
 
@@ -424,7 +439,8 @@ $response = $vault->preauth($params); //
 
 ## Responses and Receipts
 
-The `Response` and `Receipt` objects allow you to understand how everything went with your API call. After a transaction returns from being processed the `Response` will get validated and return all the relevant information for you.
+The `Response` and `Receipt` objects allow you to understand how everything went with your API call. After a transaction
+returns from being processed the `Response` will get validated and return all the relevant information for you.
 
 ### Response
 
@@ -436,7 +452,9 @@ The information available to you on the `Response` object is as follows:
 $errors = $response->errors;
 ```
 
-Any errors that might occur during your transaction will be returned in the following format for you. It is returned in this format to allow you to handle any translation logic in your own app by utilizing the unique `title` and `field` keys in each error.
+Any errors that might occur during your transaction will be returned in the following format for you. It is returned in
+this format to allow you to handle any translation logic in your own app by utilizing the unique `title` and `field`
+keys in each error.
 
 ```php
 // The following example would be returned when you forget to set the `order_id` on your transaction. 
@@ -456,8 +474,9 @@ $errors = [
 $status = $response->status;
 ```
 
-The status will return a status code matching the appropriate error returned. See below for an example of the possible statuses returned.
- 
+The status will return a status code matching the appropriate error returned. See below for an example of the possible
+statuses returned.
+
 ```php
 ERROR                    = -23;
 INVALID_TRANSACTION_DATA = 0;
@@ -501,7 +520,8 @@ The successful property simply lets you know if your transaction has been proces
 
 ### Receipt
 
-The `Receipt` object is your record of any information relevant to your transaction you have submitted. To retrieve your receipt once you have a response see the following.
+The `Receipt` object is your record of any information relevant to your transaction you have submitted. To retrieve your
+receipt once you have a response see the following.
 
 ```php
 $response = $gateway->purchase($params);
@@ -510,7 +530,7 @@ $receipt = $response->receipt();
 ```
 
 Depending on that type of transaction, you will have different items on your `Receipt` that you have available to read.
- 
+
 ```php
 $amount = $receipt->read('amount');
 ```
@@ -555,12 +575,19 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 Moneris API is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 [ico-version]: https://img.shields.io/packagist/v/craigpaul/moneris-api.svg?style=flat-square
+
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+
 [ico-travis]: https://img.shields.io/travis/craigpaul/moneris-api/master.svg?style=flat-square
+
 [ico-downloads]: https://img.shields.io/packagist/dt/craigpaul/moneris-api.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/craigpaul/moneris-api
+
 [link-travis]: https://travis-ci.org/craigpaul/moneris-api
+
 [link-downloads]: https://packagist.org/packages/craigpaul/moneris-api
+
 [link-author]: https://github.com/craigpaul
+
 [link-contributors]: ../../contributors
